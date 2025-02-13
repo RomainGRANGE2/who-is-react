@@ -10,6 +10,7 @@ import {createBrowserRouter, RouterProvider, Outlet, useLocation} from 'react-ro
 import App from "./App.jsx";
 import ExpiredToken from "./views/ExpiredToken.jsx";
 import {SocketProvider} from "./context/SocketContext.jsx";
+import AllGames from "./views/AllGames.jsx";
 
 function Layout() {
     const location = useLocation();
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: '/game/:gameId',
                 element: <Game/>,
+            },
+            {
+                path: '/AllGames',
+                element: <AllGames/>,
             },
         ],
     },

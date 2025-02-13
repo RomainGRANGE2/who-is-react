@@ -13,7 +13,7 @@ const SignupForm = () => {
                 <Link to={'/'}>
                     <img
                         alt="Your Company"
-                        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+                        src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
                         className="mx-auto h-10 w-auto"
                     />
                 </Link>

@@ -6,7 +6,7 @@ export default function ExpiredToken() {
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md text-center">
                 <img
                     alt="Your Company"
-                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+                    src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
                     className="mx-auto h-10 w-auto"
                 />
                 <h2 className="text-2xl font-bold mb-6 text-gray-700 dark:text-gray-200 text-center mt-6">
