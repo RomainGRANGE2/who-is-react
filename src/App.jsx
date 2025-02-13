@@ -22,7 +22,7 @@ const Home = () => {
 
     const createParty = () => {
         const userId = jwtDecode(sessionStorage.getItem("token")).id;
-        fetch("http://localhost:3000/game", {
+        fetch("https://who-is-react-api.onrender.com/game", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const Home = () => {
                                     setSubmitting(false);
                                 }, 400);
                                 const userId = jwtDecode(sessionStorage.getItem("token")).id;
-                                fetch(`http://localhost:3000/game/join/${values.partyCode}`, {
+                                fetch(`https://who-is-react-api.onrender.co/game/join/${values.partyCode}`, {
                                     method: "PATCH",
                                     headers: {
                                         "Content-Type": "application/json",

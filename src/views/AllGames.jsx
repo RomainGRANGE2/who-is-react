@@ -6,7 +6,7 @@ const AllGames = () => {
     useEffect(() => {
         const getAllGames = async () => {
             try {
-                const response = await fetch('http://localhost:3000/game', {
+                const response = await fetch('https://who-is-react-api.onrender.com/game', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -35,7 +35,7 @@ const SignupForm = () => {
                         setTimeout(() => {
                             setSubmitting(false);
                         }, 400);
-                        fetch('http://localhost:3000/register', {
+                        fetch('https://who-is-react-api.onrender.com/register', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

@@ -134,37 +134,56 @@ const Game = () => {
     };
 
     return (
-        <div className="dark:bg-gray-900 mt-10">
+        <div className="dark:bg-gray-900 mt-10 min-h-screen flex justify-center">
             {!!sessionStorage.getItem("token") && (
-                <div
-                    className="dark:text-white text-black max-w-7xl mx-auto flex flex-col items-center h-[calc(100vh-40px)]">
-                    <p className="text-2xl">Partie numéro : <span className="font-bold">{gameId}</span></p>
+                <div className="dark:text-white text-black max-w-5xl w-full mx-auto flex flex-col items-center">
 
-                    <div className="mt-6">
-                        <h3 className="text-lg font-bold">Joueurs dans la partie :</h3>
-                        <ul>
+                    {/* 🏆 Numéro de Partie */}
+                    <p className="text-3xl font-bold mt-4">
+                        Partie <span className="text-indigo-500">#{gameId}</span>
+                    </p>
+
+                    {/* 🎭 Liste des Joueurs */}
+                    <div className="mt-6 w-full text-center">
+                        <h3 className="text-xl font-semibold mb-3">👥 Joueurs :</h3>
+                        <ul className="flex justify-center gap-4">
                             {players.map((player) => (
-                                <li key={player.id} className="text-indigo-500 font-semibold">
+                                <li
+                                    key={player.id}
+                                    className={`text-lg font-medium px-6 py-2 rounded-lg shadow-md transition 
+                                        ${currentTurn === player.id ? "bg-indigo-500 text-white" : "bg-gray-300 dark:bg-gray-700"}`}
+                                >
                                     {player.username} {currentTurn === player.id && "⭐"}
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Sélection du personnage uniquement AVANT que la partie ne commence */}
+                    {/* ✅ Bouton pour démarrer la partie */}
+                    {players.length >= 2 && !gameStarted && (
+                        <button
+                            onClick={startGame}
+                            className="mt-6 bg-green-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition transform hover:scale-105"
+                        >
+                            🎮 Démarrer la partie
+                        </button>
+                    )}
+
+                    {/* 🏅 Sélection du personnage */}
                     {gameStarted && !characterConfirmed && (
-                        <div className="mt-6">
-                            <h3 className="text-lg font-bold">Choisissez un personnage :</h3>
+                        <div className="mt-6 text-center">
+                            <h3 className="text-xl font-semibold">Choisissez un personnage :</h3>
                             <div className="grid grid-cols-4 gap-4 mt-4">
                                 {characters.map((character) => (
                                     <div
                                         key={character.id}
-                                        className={`border rounded-lg p-2 text-center cursor-pointer 
-                    ${selectedCharacter?.id === character.id ? "border-green-500" : "border-gray-300"}`}
+                                        className={`border rounded-lg p-3 text-center cursor-pointer shadow-lg transition-transform hover:scale-110 
+                                            ${selectedCharacter?.id === character.id ? "border-green-500 ring-2 ring-green-300" : "border-gray-300 dark:border-gray-600"}`}
                                         onClick={() => setSelectedCharacter(character)}
                                     >
-                                        <img src={character.image} alt={character.name} className="w-20 h-20 mx-auto rounded-full" />
-                                        <p className="mt-2">{character.name}</p>
+                                        <img src={character.image} alt={character.name}
+                                             className="w-20 h-20 mx-auto rounded-full"/>
+                                        <p className="mt-2 text-sm font-medium">{character.name}</p>
                                     </div>
                                 ))}
                             </div>
@@ -173,133 +192,121 @@ const Game = () => {
                                 onClick={() => {
                                     if (!selectedCharacter) return;
                                     setCharacterConfirmed(true);
-                                    socket.emit("selectCharacter", { gameId, userId: user.id, character: selectedCharacter });
+                                    socket.emit("selectCharacter", {
+                                        gameId,
+                                        userId: user.id,
+                                        character: selectedCharacter
+                                    });
                                 }}
-                                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+                                className="mt-4 bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition transform hover:scale-105"
                             >
-                                Confirmer mon personnage
+                                ✅ Confirmer mon personnage
                             </button>
                         </div>
                     )}
 
-                    {/* Affichage de la liste des personnages SEULEMENT après le début de la partie */}
+                    {/* 👀 Affichage des personnages APRES le début de la partie */}
                     {gameStarted && characterConfirmed && (
                         <div className="grid grid-cols-4 gap-4 mt-6">
                             {remainingCharacters.map((character) => (
                                 <div
                                     key={character.id}
-                                    className={`border rounded-lg p-2 text-center cursor-pointer bg-white dark:bg-gray-800 
-                ${charactersToEliminate.includes(character.id) ? "opacity-50" : ""}`}
+                                    className={`border rounded-lg p-3 text-center cursor-pointer bg-white dark:bg-gray-800 shadow-md transition 
+                                        ${charactersToEliminate.includes(character.id) ? "opacity-50" : "hover:scale-105"}`}
                                     onClick={() => {
                                         if (currentTurn === user.id && answer && waitingForElimination) {
-                                            // Ajoute ou retire un personnage de la liste d'élimination
                                             setCharactersToEliminate((prev) =>
                                                 prev.includes(character.id)
-                                                    ? prev.filter(id => id !== character.id) // Retirer si déjà sélectionné
-                                                    : [...prev, character.id] // Ajouter sinon
+                                                    ? prev.filter(id => id !== character.id)
+                                                    : [...prev, character.id]
                                             );
                                         }
                                     }}
                                 >
                                     <img src={character.image} alt={character.name}
                                          className="w-20 h-20 mx-auto rounded-full"/>
-                                    <p className="mt-2">{character.name}</p>
+                                    <p className="mt-2 text-sm">{character.name}</p>
                                 </div>
                             ))}
                         </div>
-
                     )}
 
-
+                    {/* 🏆 Personnage choisi en bas à droite */}
                     {gameStarted && characterConfirmed && selectedCharacter && (
                         <div
-                            className="fixed bottom-4 right-4 p-4 bg-gray-800 text-white rounded-lg shadow-lg flex items-center">
+                            className="fixed bottom-4 right-4 p-4 bg-gray-800 text-white rounded-lg shadow-xl flex items-center">
                             <img src={selectedCharacter.image} alt={selectedCharacter.name}
                                  className="w-16 h-16 rounded-full mr-4"/>
-                            <p className="text-lg font-bold">{selectedCharacter.name}</p>
+                            <p className="text-lg font-semibold">{selectedCharacter.name}</p>
                         </div>
                     )}
 
+                    {/* 🎤 Poser une question */}
                     {gameStarted && bothCharactersChosen && currentTurn === user.id && !receivedQuestion && !waitingForElimination && (
-                        <div className="mt-6">
+                        <div className="mt-6 flex gap-4 items-center">
                             <input
                                 type="text"
                                 value={question}
                                 onChange={(e) => setQuestion(e.target.value)}
                                 placeholder="Posez une question..."
-                                className="border rounded p-2"
+                                className="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 shadow-md"
                             />
                             <button
                                 onClick={() => {
                                     if (!question.trim()) return;
-                                    socket.emit("askQuestion", { gameId, question });
+                                    socket.emit("askQuestion", {gameId, question});
                                     setQuestion("");
                                 }}
-                                className="ml-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
                             >
-                                Poser la question
+                                🎤 Poser
                             </button>
                         </div>
                     )}
 
-
-
+                    {/* 📢 Répondre à une question */}
                     {gameStarted && receivedQuestion && !answer && currentTurn !== user.id && (
-                        <div className="mt-6">
-                            <p className="text-lg font-semibold text-indigo-500">Question : "{receivedQuestion}"</p>
-                            <button
-                                onClick={() => socket.emit("answerQuestion", {gameId, answer: "Oui"})}
-                                className="mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
-                            >
-                                Oui
-                            </button>
-                            <button
-                                onClick={() => socket.emit("answerQuestion", {gameId, answer: "Non"})}
-                                className="mt-2 ml-2 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition"
-                            >
-                                Non
-                            </button>
+                        <div className="mt-6 text-center">
+                            <p className="text-xl font-semibold text-indigo-500">❓ "{receivedQuestion}"</p>
+                            <div className="mt-4 space-x-4">
+                                <button
+                                    onClick={() => socket.emit("answerQuestion", {gameId, answer: "Oui"})}
+                                    className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-green-600 transition"
+                                >
+                                    ✅ Oui
+                                </button>
+                                <button
+                                    onClick={() => socket.emit("answerQuestion", {gameId, answer: "Non"})}
+                                    className="bg-red-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition"
+                                >
+                                    ❌ Non
+                                </button>
+                            </div>
                         </div>
                     )}
 
+                    {/* 🔄 Fin du tour */}
                     {gameStarted && answer && currentTurn === user.id && (
-                        <div className="mt-6">
+                        <div className="mt-6 text-center">
                             <p className="text-lg font-semibold text-green-500">Réponse : "{answer}"</p>
-                            <p className="text-sm text-gray-400">Cliquez sur les personnages à éliminer, puis cliquez sur "Tour terminé".</p>
+                            <p className="text-sm text-gray-400">Cliquez sur les personnages à éliminer, puis cliquez
+                                sur "Tour terminé".</p>
 
                             <button
                                 onClick={() => {
                                     setRemainingCharacters((prev) => prev.filter(c => !charactersToEliminate.includes(c.id)));
-
                                     setCharactersToEliminate([]);
-
                                     setAnswer(null);
                                     setReceivedQuestion(null);
                                     setWaitingForElimination(false);
-
                                     socket.emit("endTurn", gameId);
                                 }}
-                                className="mt-4 bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600 transition"
+                                className="mt-4 bg-purple-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-700 transition"
                             >
-                                Tour terminé
+                                🔄 Tour terminé
                             </button>
                         </div>
                     )}
-
-                    {gameStarted && canMakeGuess && currentTurn === user.id && (
-                        <div className="mt-6">
-                            <p className="text-lg font-semibold text-yellow-500">Vous pouvez maintenant faire une proposition !</p>
-                            <button
-                                onClick={() => {
-                                    socket.emit("makeGuess", { gameId, userId: user.id, guessedCharacter: remainingCharacters[0] });
-                                }}
-                                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition"
-                            >
-                                Proposer {remainingCharacters[0].name}
-                            </button>
-                        </div>
-                    )}
-
 
                     {gameOver && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -336,6 +343,19 @@ const Game = () => {
                         </div>
                     )}
 
+                    {gameStarted && canMakeGuess && currentTurn === user.id && (
+                        <div className="mt-6">
+                            <p className="text-lg font-semibold text-yellow-500">Vous pouvez maintenant faire une proposition !</p>
+                            <button
+                                onClick={() => {
+                                    socket.emit("makeGuess", { gameId, userId: user.id, guessedCharacter: remainingCharacters[0] });
+                                }}
+                                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition"
+                            >
+                                Proposer {remainingCharacters[0].name}
+                            </button>
+                        </div>
+                    )}
 
                     {players.length === 1 && (
                         <p className="mt-6 text-yellow-400 font-semibold text-lg">
@@ -343,18 +363,10 @@ const Game = () => {
                         </p>
                     )}
 
-                    {players.length >= 2 && !gameStarted && (
-                        <button
-                            onClick={startGame}
-                            className="mt-6 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors text-center"
-                        >
-                            Démarrer la partie
-                        </button>
-                    )}
-
                 </div>
             )}
         </div>
+
     );
 };
 
