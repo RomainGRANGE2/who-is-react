@@ -5,7 +5,7 @@ export const SocketProvider = ({children}) => {
     const [socket, setSocket] = useState();
 
     useEffect(() => {
-        const newSocket = io("http://localhost:3000");
+        const newSocket = io("https://who-is-react-api.onrender.com/");
         console.log(newSocket);
         setSocket(newSocket);
 
@@ -21,4 +21,4 @@ export const SocketProvider = ({children}) => {
     );
 }
 
-export const SocketContext = createContext(io("http://localhost:3000"))
+export const SocketContext = createContext(io("https://who-is-react-api.onrender.com/"))
