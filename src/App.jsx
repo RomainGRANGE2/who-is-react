@@ -52,7 +52,7 @@ const Home = () => {
                                     setSubmitting(false);
                                 }, 400);
                                 const userId = jwtDecode(sessionStorage.getItem("token")).id;
-                                fetch(`https://who-is-react-api.onrender.co/game/join/${values.partyCode}`, {
+                                fetch(`https://who-is-react-api.onrender.com/game/join/${values.partyCode}`, {
                                     method: "PATCH",
                                     headers: {
                                         "Content-Type": "application/json",
