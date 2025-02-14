@@ -43,19 +43,19 @@ const characters = [
 const Game = () => {
     const socket = useContext(SocketContext);
     const { gameId } = useParams();
-    const [players, setPlayers] = useState([]); // Liste des joueurs
+    const [players, setPlayers] = useState([]);
     const [gameStarted, setGameStarted] = useState(false);
-    const [currentTurn, setCurrentTurn] = useState(null); // Qui joue actuellement
+    const [currentTurn, setCurrentTurn] = useState(null);
 
-    const [question, setQuestion] = useState(""); // Question posée
-    const [receivedQuestion, setReceivedQuestion] = useState(null); // Question reçue
-    const [answer, setAnswer] = useState(null); // Réponse donnée
-    const [remainingCharacters, setRemainingCharacters] = useState(characters); // Personnages en jeu
-    const [waitingForElimination, setWaitingForElimination] = useState(false); // Bloque le tour tant que le joueur n'a pas validé
+    const [question, setQuestion] = useState("");
+    const [receivedQuestion, setReceivedQuestion] = useState(null);
+    const [answer, setAnswer] = useState(null);
+    const [remainingCharacters, setRemainingCharacters] = useState(characters);
+    const [waitingForElimination, setWaitingForElimination] = useState(false);
 
-    const [selectedCharacter, setSelectedCharacter] = useState(null); // Personnage choisi par le joueur
-    const [opponentCharacter, setOpponentCharacter] = useState(null); // Personnage choisi par l'adversaire
-    const [characterConfirmed, setCharacterConfirmed] = useState(false); // Validation du choix
+    const [selectedCharacter, setSelectedCharacter] = useState(null);
+    const [opponentCharacter, setOpponentCharacter] = useState(null);
+    const [characterConfirmed, setCharacterConfirmed] = useState(false);
 
     const [bothCharactersChosen, setBothCharactersChosen] = useState(false);
 
@@ -72,48 +72,48 @@ const Game = () => {
     const user = jwtDecode(sessionStorage.getItem("token"));
 
     useEffect(() => {
-        if (!socket) return; // Vérifie que le socket est bien défini
-        // Rejoindre la partie
+        if (!socket) return;
+
         socket.emit("joinGame", { gameId, user });
 
-        // Mettre à jour la liste des joueurs
+
         socket.on("updatePlayers", (playersList) => {
             setPlayers(playersList || []);
         });
 
-        // Écouter si la partie démarre
+
         socket.on("gameStarted", () => {
             setGameStarted(true);
         });
 
-        // Écouter les changements de tour
+
         socket.on("updateTurn", (turnPlayerId) => {
             setCurrentTurn(turnPlayerId);
-            setAnswer(null); // Réinitialise la réponse pour éviter qu'elle apparaisse au mauvais joueur
-            setReceivedQuestion(null); // Réinitialise la question pour permettre au nouveau joueur de poser la sienne
-            setWaitingForElimination(false); // Permet au joueur suivant de poser sa question
+            setAnswer(null);
+            setReceivedQuestion(null);
+            setWaitingForElimination(false);
 
-            // Vérifie si le joueur n'a plus qu'un personnage et active "canMakeGuess" pour le tour suivant
+
             if (remainingCharacters.length === 1 && turnPlayerId === user.id) {
                 setCanMakeGuess(true);
             } else {
-                setCanMakeGuess(false); // Réinitialise au cas où
+                setCanMakeGuess(false);
             }
         });
 
-        // Réception d'une question posée
+
         socket.on("receiveQuestion", (question) => {
             setReceivedQuestion(question);
             setAnswer(null);
         });
 
-        // Réception d'une réponse
+
         socket.on("receiveAnswer", (answer) => {
             setAnswer(answer);
-            setWaitingForElimination(true); // Empêche de passer au tour suivant immédiatement
+            setWaitingForElimination(true);
         });
 
-        // Mise à jour des personnages sélectionnés
+
         socket.on("updateSelectedCharacters", (players) => {
             const myCharacter = players.find(p => p.id === user.id)?.selectedCharacter;
             const opponent = players.find(p => p.id !== user.id)?.selectedCharacter;
@@ -121,15 +121,15 @@ const Game = () => {
             setSelectedCharacter(myCharacter);
             setOpponentCharacter(opponent);
 
-            // Vérifie si les deux joueurs ont choisi un personnage
+
             if (myCharacter && opponent) {
                 setBothCharactersChosen(true);
             } else {
-                setBothCharactersChosen(false); // 🔹 Empêche l'affichage de l'input si un joueur n'a pas encore choisi
+                setBothCharactersChosen(false);
             }
         });
 
-        // Fin de partie
+
         socket.on("gameOver", ({ winnerId, loserId, message }) => {
             setGameOver(true);
 
@@ -152,12 +152,12 @@ const Game = () => {
     }, [gameId, socket, remainingCharacters]);
 
 
-    // Fonction pour démarrer la partie
+
     const startGame = () => {
         socket.emit("startGame", gameId);
     };
 
-    // Fonction pour passer au joueur suivant
+
     const nextTurn = () => {
         socket.emit("nextTurn", gameId);
     };
@@ -356,10 +356,10 @@ const Game = () => {
                                         setSelectedCharacter(null);
                                         setOpponentCharacter(null);
                                         setCharacterConfirmed(false);
-                                        setBothCharactersChosen(false); // 🔹 Réinitialise la validation des personnages
+                                        setBothCharactersChosen(false);
                                         setCanMakeGuess(false);
 
-                                        // Rejoindre à nouveau la partie
+
                                         socket.emit("joinGame", {gameId, user});
                                     }}
                                     className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"

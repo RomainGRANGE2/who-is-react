@@ -27,7 +27,7 @@ export default function Header() {
 
     const isInGameRoute = location.pathname.startsWith("/game/");
 
-    // Vérifiez le mode sombre au premier rendu
+
     useEffect(() => {
         const darkMode = sessionStorage.getItem("darkMode") === "true";
         setIsDarkMode(darkMode);
@@ -36,7 +36,7 @@ export default function Header() {
 
     const leaveGame = function (){
         const user = jwtDecode(sessionStorage.getItem("token"));
-        const gameId = window.location.pathname.split("/game/")[1]; // Récupérer l'ID de la partie
+        const gameId = window.location.pathname.split("/game/")[1];
 
         if (gameId) {
             socket.emit("leaveGame", { gameId, user });
@@ -48,7 +48,7 @@ export default function Header() {
 
     const handleToggleDarkMode = () => {
         toggleDarkMode();
-        setIsDarkMode(prev => !prev); // Inverser l'état local
+        setIsDarkMode(prev => !prev);
     };
 
     return (

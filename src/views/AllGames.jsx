@@ -28,7 +28,7 @@ const AllGames = () => {
         getAllGames();
     }, []);
 
-    // Fonction pour définir la couleur de fond en fonction de l'état de la partie
+
     const getStatusColor = (state) => {
         switch (state) {
             case "pending":
