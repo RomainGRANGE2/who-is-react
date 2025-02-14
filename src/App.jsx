@@ -20,6 +20,10 @@ const Home = () => {
         setIsAuthenticated(!!token);
     }, []);
 
+    const goToAllGames = function (){
+        navigate('/AllGames')
+    }
+
     const createParty = () => {
         const userId = jwtDecode(sessionStorage.getItem("token")).id;
         fetch("https://who-is-react-api.onrender.com/game", {
@@ -46,8 +50,8 @@ const Home = () => {
                             Entrer l'id de la partie
                         </p>
                         <Formik
-                            initialValues={{ partyCode: "" }}
-                            onSubmit={(values, { setSubmitting }) => {
+                            initialValues={{partyCode: ""}}
+                            onSubmit={(values, {setSubmitting}) => {
                                 setTimeout(() => {
                                     setSubmitting(false);
                                 }, 400);
@@ -58,7 +62,7 @@ const Home = () => {
                                         "Content-Type": "application/json",
                                         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                                     },
-                                    body: JSON.stringify({ userId }),
+                                    body: JSON.stringify({userId}),
                                 }).then(async (data) => {
                                     const gameData = await data.json();
                                     if (gameData?.id) {
@@ -74,7 +78,7 @@ const Home = () => {
                                 });
                             }}
                         >
-                            {({ values, handleChange, handleBlur, handleSubmit }) => (
+                            {({values, handleChange, handleBlur, handleSubmit}) => (
                                 <form onSubmit={handleSubmit} className="flex flex-col gap-y-4 w-full">
                                     <input
                                         id="partyCode"
@@ -103,6 +107,9 @@ const Home = () => {
                                 </form>
                             )}
                         </Formik>
+                    </div>
+                    <div className={"absolute bottom-4 left-4 cursor-pointer"} onClick={goToAllGames}>
+                        <p>Historique parties</p>
                     </div>
                 </div>
             ) : (
@@ -154,6 +161,8 @@ const Home = () => {
                     </div>
                 </div>
             </Transition>
+
+
         </div>
     );
 };
