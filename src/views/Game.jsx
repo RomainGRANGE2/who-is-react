@@ -163,7 +163,7 @@ const Game = () => {
     };
 
     return (
-        <div className="dark:bg-gray-900 mt-10 min-h-screen flex justify-center">
+        <div className="dark:bg-gray-900 pt-10 min-h-screen flex justify-center">
             {!!sessionStorage.getItem("token") && (
                 <div className="dark:text-white text-black max-w-5xl w-full mx-auto flex flex-col items-center">
 
@@ -198,67 +198,6 @@ const Game = () => {
                         </button>
                     )}
 
-                    {/* 🏅 Sélection du personnage */}
-                    {gameStarted && !characterConfirmed && (
-                        <div className="mt-6 text-center">
-                            <h3 className="text-xl font-semibold">Choisissez un personnage :</h3>
-                            <div className="grid grid-cols-4 gap-4 mt-4">
-                                {characters.map((character) => (
-                                    <div
-                                        key={character.id}
-                                        className={`border rounded-lg p-3 text-center cursor-pointer shadow-lg transition-transform hover:scale-110 
-                                            ${selectedCharacter?.id === character.id ? "border-green-500 ring-2 ring-green-300" : "border-gray-300 dark:border-gray-600"}`}
-                                        onClick={() => setSelectedCharacter(character)}
-                                    >
-                                        <img src={character.image} alt={character.name}
-                                             className="w-20 h-20 mx-auto rounded-full"/>
-                                        <p className="mt-2 text-sm font-medium">{character.name}</p>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button
-                                onClick={() => {
-                                    if (!selectedCharacter) return;
-                                    setCharacterConfirmed(true);
-                                    socket.emit("selectCharacter", {
-                                        gameId,
-                                        userId: user.id,
-                                        character: selectedCharacter
-                                    });
-                                }}
-                                className="mt-4 bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition transform hover:scale-105"
-                            >
-                                ✅ Confirmer mon personnage
-                            </button>
-                        </div>
-                    )}
-
-                    {/* 👀 Affichage des personnages APRES le début de la partie */}
-                    {gameStarted && characterConfirmed && (
-                        <div className="grid grid-cols-4 gap-4 mt-6">
-                            {remainingCharacters.map((character) => (
-                                <div
-                                    key={character.id}
-                                    className={`border rounded-lg p-3 text-center cursor-pointer bg-white dark:bg-gray-800 shadow-md transition 
-                                        ${charactersToEliminate.includes(character.id) ? "opacity-50" : "hover:scale-105"}`}
-                                    onClick={() => {
-                                        if (currentTurn === user.id && answer && waitingForElimination) {
-                                            setCharactersToEliminate((prev) =>
-                                                prev.includes(character.id)
-                                                    ? prev.filter(id => id !== character.id)
-                                                    : [...prev, character.id]
-                                            );
-                                        }
-                                    }}
-                                >
-                                    <img src={character.image} alt={character.name}
-                                         className="w-20 h-20 mx-auto rounded-full"/>
-                                    <p className="mt-2 text-sm">{character.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
 
                     {/* 🏆 Personnage choisi en bas à droite */}
                     {gameStarted && characterConfirmed && selectedCharacter && (
@@ -334,6 +273,67 @@ const Game = () => {
                             >
                                 🔄 Tour terminé
                             </button>
+                        </div>
+                    )}
+
+                    {gameStarted && !characterConfirmed && (
+                        <div className="mt-6 text-center">
+                            <h3 className="text-xl font-semibold">Choisissez un personnage :</h3>
+                            <div className="grid grid-cols-4 gap-4 mt-4">
+                                {characters.map((character) => (
+                                    <div
+                                        key={character.id}
+                                        className={`border rounded-lg p-3 text-center cursor-pointer shadow-lg transition-transform hover:scale-110 
+                                            ${selectedCharacter?.id === character.id ? "border-green-500 ring-2 ring-green-300" : "border-gray-300 dark:border-gray-600"}`}
+                                        onClick={() => setSelectedCharacter(character)}
+                                    >
+                                        <img src={character.image} alt={character.name}
+                                             className="w-20 h-20 mx-auto rounded-full"/>
+                                        <p className="mt-2 text-sm font-medium">{character.name}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    if (!selectedCharacter) return;
+                                    setCharacterConfirmed(true);
+                                    socket.emit("selectCharacter", {
+                                        gameId,
+                                        userId: user.id,
+                                        character: selectedCharacter
+                                    });
+                                }}
+                                className="mt-4 bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition transform hover:scale-105"
+                            >
+                                ✅ Confirmer mon personnage
+                            </button>
+                        </div>
+                    )}
+
+                    {/* 👀 Affichage des personnages APRES le début de la partie */}
+                    {gameStarted && characterConfirmed && (
+                        <div className="grid grid-cols-4 gap-4 mt-6">
+                            {remainingCharacters.map((character) => (
+                                <div
+                                    key={character.id}
+                                    className={`border rounded-lg p-3 text-center cursor-pointer bg-white dark:bg-gray-800 shadow-md transition 
+                                        ${charactersToEliminate.includes(character.id) ? "opacity-50" : "hover:scale-105"}`}
+                                    onClick={() => {
+                                        if (currentTurn === user.id && answer && waitingForElimination) {
+                                            setCharactersToEliminate((prev) =>
+                                                prev.includes(character.id)
+                                                    ? prev.filter(id => id !== character.id)
+                                                    : [...prev, character.id]
+                                            );
+                                        }
+                                    }}
+                                >
+                                    <img src={character.image} alt={character.name}
+                                         className="w-20 h-20 mx-auto rounded-full"/>
+                                    <p className="mt-2 text-sm">{character.name}</p>
+                                </div>
+                            ))}
                         </div>
                     )}
 
