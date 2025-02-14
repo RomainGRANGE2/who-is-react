@@ -4,11 +4,40 @@ import { SocketContext } from "../context/SocketContext.jsx";
 import { jwtDecode } from "jwt-decode";
 
 const characters = [
-    { id: 1, name: "Alice", image: "https://via.placeholder.com/100", glasses: true, hat: false },
-    { id: 2, name: "Bob", image: "https://via.placeholder.com/100", glasses: false, hat: true },
-    { id: 3, name: "Charlie", image: "https://via.placeholder.com/100", glasses: true, hat: true },
-    { id: 4, name: "David", image: "https://via.placeholder.com/100", glasses: false, hat: false },
+    { id: 1, name: "Lorada ANDRE", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op7O9ojpeWjNdCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 2, name: "Jérémy AUBRY", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opxldjZ3yhWEDCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 3, name: "Côme BONAL", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opz1Kjfwx_A4wCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 4, name: "Brahim BOUTAGJAT", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op7KWkBgRK02YCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 5, name: "Orian CAPEK-MESSY", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op2zcmQsKedW8CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 6, name: "Mateo CARCIU", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op3QDx6fzK7LiCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 7, name: "Mohamed CHETTAH", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op1LYUSzYfVPSCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 8, name: "Maxime CHOSTAK", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opwUpu0iRPfJNCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 9, name: "Loan COURCHINOUX BILLONNET", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op86s2_sagboMCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 10, name: "Lucas DAMIAN-PICOLLET", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opyIG9gKnrjuOCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 11, name: "Kylian DELEY", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op5LEbhQgMbdbCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 12, name: "Cedric DOUSSET", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op6oK8vda0feSCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 13, name: "Omar ELHADIDI", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op-NkIKrTGO34CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 14, name: "Antoine FALGIGLIO", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opzVoeMC_tfISCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 15, name: "Liam FAUCITANO", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op0A4j9Lx4wgiCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 16, name: "Arnaud GOUEL", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op5zOm_ayljW8CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 17, name: "Romain GRANGE", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op_F4nUm0ZEO0CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 18, name: "Cihan KAFADAR", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op-0-LcmlOlraCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 19, name: "Drilon LIMANI", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opw3I31g1hzKqCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 20, name: "Getoar LIMANI", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-opy9OgM8JfsKYCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 21, name: "Ruddy MOREL", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op0gzaMe5785GCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 22, name: "Paul NIGGLI", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op9GtmC5r9miKCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 23, name: "Bastien OEUVRARD", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op2X8G2B8QdEFCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 24, name: "Olivier PERDRIX", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op6X9vcsFHQo8CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 25, name: "Jules POISSONNET", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op4cex5ahQCy3CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 26, name: "Mathis ROME", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op96oSi4AhoGcCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 27, name: "Jérémy ROSSI", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op6gJTNbhnQ73CZSMwXEBz3M?pfdrid_c=true" },
+    { id: 28, name: "Yvan SCHMITT", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op1fb1mtKH3VpCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 29, name: "Kenza SCHULER", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op2AZ8KuyQHOfCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 30, name: "Quentin SOMVEILLE", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op7rB7d_8ugGCCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 31, name: "Michaël YAROMISHYAN", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op8nH_oDANkpmCZSMwXEBz3M?pfdrid_c=true" },
+    { id: 32, name: "Ilyas ZAHAF KRADRA", image: "https://ges-dl.kordis.fr/public/dEkj-aOcIw52B9RsgY-op_ouwrNW7W60CZSMwXEBz3M?pfdrid_c=true" }
 ];
+
 
 
 const Game = () => {
