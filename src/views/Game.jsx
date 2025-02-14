@@ -167,13 +167,11 @@ const Game = () => {
             {!!sessionStorage.getItem("token") && (
                 <div className="dark:text-white text-black max-w-5xl w-full mx-auto flex flex-col items-center">
 
-                    {/* 🏆 Numéro de Partie */}
-                    <p className="text-3xl font-bold mt-4">
+                                        <p className="text-3xl font-bold mt-4">
                         Partie <span className="text-indigo-500">#{gameId}</span>
                     </p>
 
-                    {/* 🎭 Liste des Joueurs */}
-                    <div className="mt-6 w-full text-center">
+                                        <div className="mt-6 w-full text-center">
                         <h3 className="text-xl font-semibold mb-3">👥 Joueurs :</h3>
                         <ul className="flex justify-center gap-4">
                             {players.map((player) => (
@@ -188,8 +186,7 @@ const Game = () => {
                         </ul>
                     </div>
 
-                    {/* ✅ Bouton pour démarrer la partie */}
-                    {players.length >= 2 && !gameStarted && (
+                                        {players.length >= 2 && !gameStarted && (
                         <button
                             onClick={startGame}
                             className="mt-6 bg-green-500 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition transform hover:scale-105"
@@ -199,8 +196,7 @@ const Game = () => {
                     )}
 
 
-                    {/* 🏆 Personnage choisi en bas à droite */}
-                    {gameStarted && characterConfirmed && selectedCharacter && (
+                                        {gameStarted && characterConfirmed && selectedCharacter && (
                         <div
                             className="fixed bottom-4 right-4 p-4 bg-gray-800 text-white rounded-lg shadow-xl flex items-center">
                             <img src={selectedCharacter.image} alt={selectedCharacter.name}
@@ -209,8 +205,7 @@ const Game = () => {
                         </div>
                     )}
 
-                    {/* 🎤 Poser une question */}
-                    {gameStarted && bothCharactersChosen && currentTurn === user.id && !receivedQuestion && !waitingForElimination && (
+                                        {gameStarted && bothCharactersChosen && currentTurn === user.id && !receivedQuestion && !waitingForElimination && (
                         <div className="mt-6 flex gap-4 items-center">
                             <input
                                 type="text"
@@ -232,8 +227,7 @@ const Game = () => {
                         </div>
                     )}
 
-                    {/* 📢 Répondre à une question */}
-                    {gameStarted && receivedQuestion && !answer && currentTurn !== user.id && (
+                                        {gameStarted && receivedQuestion && !answer && currentTurn !== user.id && (
                         <div className="mt-6 text-center">
                             <p className="text-xl font-semibold text-indigo-500">❓ "{receivedQuestion}"</p>
                             <div className="mt-4 space-x-4">
@@ -253,8 +247,7 @@ const Game = () => {
                         </div>
                     )}
 
-                    {/* 🔄 Fin du tour */}
-                    {gameStarted && answer && currentTurn === user.id && (
+                                        {gameStarted && answer && currentTurn === user.id && (
                         <div className="mt-6 text-center">
                             <p className="text-lg font-semibold text-green-500">Réponse : "{answer}"</p>
                             <p className="text-sm text-gray-400">Cliquez sur les personnages à éliminer, puis cliquez
@@ -311,8 +304,7 @@ const Game = () => {
                         </div>
                     )}
 
-                    {/* 👀 Affichage des personnages APRES le début de la partie */}
-                    {gameStarted && characterConfirmed && (
+                                        {gameStarted && characterConfirmed && (
                         <div className="grid grid-cols-4 gap-4 mt-6">
                             {remainingCharacters.map((character) => (
                                 <div
